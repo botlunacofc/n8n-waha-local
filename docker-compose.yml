@@ -10,10 +10,10 @@ services:
   redis:
     image: redis:latest
     platform: linux/amd64
-    command: redis-server --requirepass default
+    command: redis-server --requirepass elias
     environment:
-      REDIS_USER: default
-      REDIS_PASSWORD: default
+      REDIS_USER: elias
+      REDIS_PASSWORD: elias
     ports:
       - "6379:6379"
 
@@ -21,9 +21,9 @@ services:
     image: postgres:latest
     platform: linux/amd64
     environment:
-      POSTGRES_USER: default
-      POSTGRES_PASSWORD: default
-      POSTGRES_DB: default
+      POSTGRES_USER: elias
+      POSTGRES_PASSWORD: elias
+      POSTGRES_DB: elias
     ports:
       - "5432:5432"
     volumes:
@@ -33,9 +33,12 @@ services:
     image: devlikeapro/waha:latest
     platform: linux/amd64
     environment:
+      WAHA_BASIC_AUTH_USER: elias
+      WAHA_BASIC_AUTH_PASSWORD: elias
       WHATSAPP_HOOK_URL: http://host.docker.internal:5678/webhook/webhook
       WHATSAPP_DEFAULT_ENGINE: WEBJS
       WHATSAPP_HOOK_EVENTS: message.any
+      TZ: America/Sao_Paulo
     volumes:
       - waha_sessions:/app/.sessions
       - waha_media:/app/.media
@@ -51,6 +54,15 @@ services:
       GENERIC_TIMEZONE: America/Sao_Paulo
       N8N_LOG_LEVEL: debug
       N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE: true
+      DB_TYPE: postgresdb
+      DB_POSTGRESDB_HOST: postgres
+      DB_POSTGRESDB_PORT: 5432
+      DB_POSTGRESDB_DATABASE: elias
+      DB_POSTGRESDB_USER: elias
+      DB_POSTGRESDB_PASSWORD: elias
+      QUEUE_BULL_REDIS_HOST: redis
+      QUEUE_BULL_REDIS_PORT: 6379
+      QUEUE_BULL_REDIS_PASSWORD: elias
     volumes:
       - n8n_data:/home/node/.n8n
     ports:
